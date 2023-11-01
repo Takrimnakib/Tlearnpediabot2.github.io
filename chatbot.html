@@ -100,7 +100,7 @@
       <button id="sendButton">Send</button>
     </div>
   </div>
-  <script>
+<script>
     const chatLog = document.getElementById('chatLog');
     const userInput = document.getElementById('userInput');
     const sendButton = document.getElementById('sendButton');
@@ -134,7 +134,8 @@
     }
 
     function respondToUser(userMessage) {
-      userMessage = userMessage.toLowerCase();
+      userMessage = userMessage.toLowerCase().replace(/\s+/g, ' ').trim(); // Remove extra spaces
+
       const responses = {
           'হাল খবর?': 'আমি ভালো আছি, আপনি কেমন আছেন?',
           'hi': 'আমি ভালো আছি, আপনি কেমন আছেন?',
@@ -166,20 +167,14 @@
 // Add more predefined responses here.
       };
 
-      const response = responses[userMessage] || 'দুঃখিত, আমি বুঝতে পারছি না।';
-      addMessage(highlightMatchingWords(userMessage, response), 'bot');
-    }
-
-    function highlightMatchingWords(userInput, response) {
-      const userWords = userInput.split(' ');
-      userWords.forEach(word => {
-        if (response.includes(word)) {
-          response = response.replace(new RegExp(word, 'g'), `<span class="highlight">${word}</span>`);
+    for (const keyword in responses) {
+        if (userMessage.includes(keyword)) {
+          const response = responses[keyword].replace(new RegExp(keyword, 'g'), `<span class="highlight">${keyword}</span>`);
+          addMessage(response, 'bot');
+          return;
         }
-      });
-      return response;
+      }
+      // If no predefined response is found, you can add a default response here.
+      addMessage('আমি বুঝতে পারি নি, দয়া করে আরম্ভ করুন।', 'bot');
     }
-  </script>
-</body>
-</html>
-      
+</script>
